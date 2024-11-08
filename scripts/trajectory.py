@@ -6,8 +6,10 @@ from geometry_msgs.msg import PoseStamped
 class TrajectoryPublisher(Node):
     def __init__(self):
         super().__init__('trajectory_publisher')
-        self.path_pub = self.create_publisher(Path, 'trajectory', 10)
-        self.odom_sub = self.create_subscription(Odometry, '/odom', self.odom_callback, 10)
+        self.declare_parameter("trajectory_topic", "trajectory")
+        self.declare_parameter("odometry_topic", "odom")
+        self.path_pub = self.create_publisher(Path, self.get_parameter("trajectory_topic").value, 10)
+        self.odom_sub = self.create_subscription(Odometry, self.get_parameter("odometry_topic").value, self.odom_callback, 10)
         
         self.path = Path()
         self.path.header.frame_id = "odom"
