@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from nav_msgs.msg import Odometry, Path
 from geometry_msgs.msg import PoseStamped
+import time
 
 class TrajectoryPublisher(Node):
     def __init__(self):
@@ -13,19 +14,24 @@ class TrajectoryPublisher(Node):
         
         self.path = Path()
         self.path.header.frame_id = "odom"
+        self.last_publish_time = 0
 
     def odom_callback(self, msg):
-        # Create a PoseStamped message from the Odometry data
-        pose = PoseStamped()
-        pose.header = msg.header
-        pose.pose = msg.pose.pose
+        if time.time() - self.last_publish_time > 0.1:
+            # Create a PoseStamped message from the Odometry data
+            pose = PoseStamped()
+            pose.header = msg.header
+            pose.pose = msg.pose.pose
 
-        # Append the pose to the path
-        self.path.header.stamp = msg.header.stamp
-        self.path.poses.append(pose)
+            # Append the pose to the path
+            self.path.header.stamp = msg.header.stamp
+            self.path.poses.append(pose)
 
-        # Publish the path
-        self.path_pub.publish(self.path)
+            # Publish the path
+            self.path_pub.publish(self.path)
+            self.last_publish_time = time.time()
+        else:
+            time.sleep(0.1)
 
 def main(args=None):
     rclpy.init(args=args)
