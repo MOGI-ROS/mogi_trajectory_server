@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'mogi_trajectory_server = mogi_trajectory_server.trajectory:main'
+            'mogi_trajectory_server = mogi_trajectory_server.trajectory:main',
+            'mogi_trajectory_server_topic_based = mogi_trajectory_server.trajectory_topic_based:main'
         ],
     },
 )
