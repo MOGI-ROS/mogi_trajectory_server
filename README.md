@@ -1,7 +1,13 @@
+[//]: # (Image References)
+
+[image1]: ./trajectory.png "trajectory"
+
 # mogi_trajectory_server
 Trajectory visualization for ROS2 with pretty much the same functionality as `hector_trajectory_server` for ROS1.
 This package provides a node that saves trajectory data using a TransformListener between `reference_frame_id` and `robot_frame_id`, the trajectory is saved internally as a `nav_msgs/Path` and can be obtained through the `trajectory_topic` topic.
 The `update_rate`, `publish_rate` and `min_distance` - that triggers an update - can be modified by parameters as described below.
+
+![alt text][image1]
 
 ## Usage:
 
