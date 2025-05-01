@@ -1,6 +1,7 @@
 [//]: # (Image References)
 
 [image1]: ./trajectory.png "trajectory"
+[image2]: ./trajectory_arm.png "trajectory"
 
 # mogi_trajectory_server
 Trajectory visualization for ROS2 with pretty much the same functionality as `hector_trajectory_server` for ROS1.
@@ -27,6 +28,26 @@ trajectory_node = Node(
                 {'robot_frame_id': 'base_link'}]
 )
 ```
+
+---
+
+The node can be also used with robotic arms to visualize the trajectory of the end effector, example launch file:
+
+```python
+    trajectory_node = Node(
+        package='mogi_trajectory_server',
+        executable='mogi_trajectory_server',
+        name='mogi_trajectory_server',
+        parameters=[{'reference_frame_id': 'world',
+                     'robot_frame_id': 'end_effector_link',
+                     'update_rate': 5.0,
+                     'publish_rate': 5.0,
+                     'min_distance': 0.02,
+                     }],
+    )
+```
+
+![alt text][image2]
 
 ## Subscribed Topics:
 No topic subscription is needed because the node uses a TransformListener.
@@ -62,7 +83,7 @@ trajectory (nav_msgs/Path)
 ---
 ---
 
-# mogi_trajectory_server_topic_based
+# legacy topic based node: mogi_trajectory_server_topic_based
 Pretty much identical functiuonality but uses an odometry topic as input instead of TransformListener. It's not accurate on maps and in general not recommended to use over the `mogi_trajectory_server` but can be still useful in certain use cases.
 This package provides a node that saves trajectory data based on the `odometry_topic` topic, the trajectory is saved internally as a `nav_msgs/Path` and can be obtained through the `trajectory_topic` topic.
 The `publish_rate` and `min_distance` - that triggers an update - can be modified by parameters as described below.
