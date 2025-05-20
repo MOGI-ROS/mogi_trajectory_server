@@ -61,9 +61,13 @@ class TrajectoryPublisher(Node):
                 self.last_pose = pose
                 return
 
-            # Check the distance change in 2D
-            distance_moved = math.sqrt((pose.pose.position.x - self.last_pose.pose.position.x)**2 + (pose.pose.position.y - self.last_pose.pose.position.y)**2)
-
+            # Check the distance change in 3D
+            distance_moved = math.sqrt(
+                (pose.pose.position.x - self.last_pose.pose.position.x) ** 2 +
+                (pose.pose.position.y - self.last_pose.pose.position.y) ** 2 +
+                (pose.pose.position.z - self.last_pose.pose.position.z) ** 2
+            )
+            
             if distance_moved >= self.min_distance:
                 # Append the pose to the path
                 self.path.poses.append(pose)
