@@ -15,7 +15,6 @@ class TrajectoryPublisher(Node):
         self.declare_parameter("update_rate", 3.0) # in Hz
         self.declare_parameter("publish_rate", 2.0) # in Hz
         self.declare_parameter("min_distance", 0.1) # in meters
-        self.declare_parameter('sim_time', True)
 
         # TF2 Listener
         self.tf_buffer = Buffer()
@@ -27,12 +26,7 @@ class TrajectoryPublisher(Node):
         self.min_distance = self.get_parameter("min_distance").value
         self.reference_frame_id = self.get_parameter("reference_frame_id").value
         self.robot_frame_id = self.get_parameter("robot_frame_id").value
-        self.use_sim_time = self.get_parameter('sim_time').get_parameter_value().bool_value
-
-        if self.use_sim_time:
-            self.set_parameters([rclpy.parameter.Parameter('use_sim_time', rclpy.Parameter.Type.BOOL, True)])
-            self.sim_time = None
-            self.create_subscription(Clock, '/clock', self.clock_callback, 10)
+        self.use_sim_time = self.get_parameter('use_sim_time').get_parameter_value().bool_value
 
         # Create seperate timers for publisher and transformation
         self.path_pub = self.create_publisher(Path, self.get_parameter("trajectory_topic").value, 10)
@@ -44,9 +38,6 @@ class TrajectoryPublisher(Node):
         self.path = Path()
         self.path.header.frame_id = self.get_parameter("reference_frame_id").value
 
-    def clock_callback(self, msg):
-        self.sim_time = msg.clock
-
     def get_pose(self):
         try:
             # Look up the transformation between reference frame and robot frame
@@ -57,12 +48,8 @@ class TrajectoryPublisher(Node):
                 timeout=rclpy.duration.Duration(seconds=1.0)
             )
 
-            if self.use_sim_time:
-                if self.sim_time is None:
-                    return
-                now = self.sim_time
-            else:
-                now = transform.header.stamp
+            # This will always use the right clock based on value of use_sim_time
+            now = self.get_clock().now().to_msg()
 
             # Extract the position
             pose = PoseStamped()
