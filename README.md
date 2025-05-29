@@ -10,6 +10,12 @@ The `update_rate`, `publish_rate` and `min_distance` - that triggers an update -
 
 ![alt text][image1]
 
+## Dependencies:
+The project depends on Bit-Bots' TF buffer! Clone the following repositories into your workspace:
+```bash
+https://github.com/bit-bots/ros2_python_extension
+https://github.com/bit-bots/bitbots_tf_buffer
+```
 ## Usage:
 
 Starting it as a node:
@@ -24,8 +30,9 @@ trajectory_node = Node(
     package='mogi_trajectory_server',
     executable='mogi_trajectory_server',
     name='mogi_trajectory_server',
-    parameters=[{'reference_frame_id': 'map'},
-                {'robot_frame_id': 'base_link'}]
+    parameters=[{'reference_frame_id': 'map',
+                'robot_frame_id': 'base_link',
+                'use_sim_time': True}]
 )
 ```
 
@@ -43,6 +50,7 @@ The node can be also used with robotic arms to visualize the trajectory of the e
                      'update_rate': 5.0,
                      'publish_rate': 5.0,
                      'min_distance': 0.02,
+                     'use_sim_time': True
                      }],
     )
 ```
@@ -77,7 +85,8 @@ trajectory (nav_msgs/Path)
 ~`min_distance` (double, default: 0.1)  
 *The minimum movement of the robot that triggers an update within the node*
 
-
+~`use_sim_time` (bool, default: False)  
+*Wheter to use simulation time or wall clock*
 
 ---
 ---

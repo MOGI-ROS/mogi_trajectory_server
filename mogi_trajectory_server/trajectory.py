@@ -2,7 +2,8 @@ import rclpy
 from rclpy.node import Node
 from nav_msgs.msg import Odometry, Path
 from geometry_msgs.msg import PoseStamped, TransformStamped
-from tf2_ros import TransformListener, Buffer
+#from tf2_ros import TransformListener, Buffer
+from bitbots_tf_buffer import Buffer
 from rosgraph_msgs.msg import Clock
 import math
 
@@ -17,8 +18,10 @@ class TrajectoryPublisher(Node):
         self.declare_parameter("min_distance", 0.1) # in meters
 
         # TF2 Listener
-        self.tf_buffer = Buffer()
-        self.tf_listener = TransformListener(self.tf_buffer, self)
+        self.tf_buffer = Buffer(self)
+        # Decrease CPU load by not using a TransformListener
+        # Using https://github.com/bit-bots/bitbots_tf_buffer instead
+        #self.tf_listener = TransformListener(self.tf_buffer, self)
 
         # Default values
         self.update_rate = self.get_parameter("update_rate").value
