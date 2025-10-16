@@ -18,7 +18,7 @@ class TrajectoryPublisher(Node):
         self.declare_parameter("min_distance", 0.1) # in meters
 
         # TF2 Listener
-        self.tf_buffer = Buffer(self)
+        self.tf_buffer = Buffer(node=self)
         # Decrease CPU load by not using a TransformListener
         # Using https://github.com/bit-bots/bitbots_tf_buffer instead
         #self.tf_listener = TransformListener(self.tf_buffer, self)
