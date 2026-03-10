@@ -10,12 +10,6 @@ The `update_rate`, `publish_rate` and `min_distance` - that triggers an update -
 
 ![alt text][image1]
 
-## Dependencies:
-The project depends on Bit-Bots' TF buffer! Clone the following repositories into your workspace:
-```bash
-https://github.com/bit-bots/ros2_python_extension
-https://github.com/bit-bots/bitbots_tf_buffer
-```
 ## Usage:
 
 Starting it as a node:
